@@ -7,7 +7,7 @@ import { NOTIFICATION_TIMEOUT_TYPE } from '../notifications/constants';
 import {
     RESET_WHITEBOARD,
     SETUP_WHITEBOARD,
-    SET_WHITEBOARD_OPEN
+    SET_WHITEBOARD_OPEN,
 } from './actionTypes';
 import { IWhiteboardAction } from './reducer';
 

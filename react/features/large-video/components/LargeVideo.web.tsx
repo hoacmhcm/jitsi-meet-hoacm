@@ -205,7 +205,7 @@ class LargeVideo extends Component<IProps> {
                 ref = { this._containerRef }
                 style = { style }>
                 <SharedVideo />
-                {_whiteboardReady && <Whiteboard />}
+                <Whiteboard />
                 <div id = 'etherpad' />
 
                 <Watermarks />

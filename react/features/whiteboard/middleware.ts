@@ -35,6 +35,8 @@ import {
     shouldNotifyUserLimit
 } from './functions';
 import { WhiteboardStatus } from './types';
+import {getLocalParticipant} from "../base/participants/functions";
+import {PARTICIPANT_ROLE} from "../base/participants/constants";
 
 const focusWhiteboard = (store: IStore) => {
     const { dispatch, getState } = store;
@@ -82,6 +84,10 @@ MiddlewareRegistry.register((store: IStore) => (next: Function) => async (action
             return;
         }
 
+        console.log('existingCollabDetails', existingCollabDetails);
+
+        const isModerator = getLocalParticipant(state)?.role === PARTICIPANT_ROLE.MODERATOR;
+
         if (!existingCollabDetails) {
             const collabLinkData = await generateCollaborationLinkData();
             const collabServerUrl = getCollabServerUrl(state);
@@ -102,6 +108,7 @@ MiddlewareRegistry.register((store: IStore) => (next: Function) => async (action
             return;
         }
 
+        // if (action.isOpen && !isModerator) {
         if (action.isOpen) {
             if (enforceUserLimit) {
                 dispatch(restrictWhiteboard());
@@ -129,6 +136,7 @@ MiddlewareRegistry.register((store: IStore) => (next: Function) => async (action
 
         break;
     }
+
     case RESET_WHITEBOARD: {
         dispatch(participantLeft(WHITEBOARD_ID, conference, { fakeParticipant: FakeParticipant.Whiteboard }));
         raiseWhiteboardNotification(WhiteboardStatus.RESET);

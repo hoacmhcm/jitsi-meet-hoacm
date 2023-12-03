@@ -1,24 +1,27 @@
-import { ExcalidrawApp } from '@jitsi/excalidraw';
-import clsx from 'clsx';
-import React, { useCallback, useEffect, useRef } from 'react';
-import { WithTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import {Excalidraw, ExcalidrawApp, exportToBlob} from "@jitsi/excalidraw";
+import clsx from "clsx";
+import React, {useCallback, useEffect, useRef, useState} from "react";
+import {WithTranslation} from "react-i18next";
+import {useDispatch, useSelector} from "react-redux";
 
 // @ts-expect-error
-import Filmstrip from '../../../../../modules/UI/videolayout/Filmstrip';
-import { IReduxState } from '../../../app/types';
-import { translate } from '../../../base/i18n/functions';
-import { getLocalParticipant } from '../../../base/participants/functions';
-import { getVerticalViewMaxWidth } from '../../../filmstrip/functions.web';
-import { getToolboxHeight } from '../../../toolbox/functions.web';
-import { shouldDisplayTileView } from '../../../video-layout/functions.any';
-import { WHITEBOARD_UI_OPTIONS } from '../../constants';
+import Filmstrip from "../../../../../modules/UI/videolayout/Filmstrip";
+import {IReduxState} from "../../../app/types";
+import {translate} from "../../../base/i18n/functions";
+import {getLocalParticipant} from "../../../base/participants/functions";
+import {getVerticalViewMaxWidth} from "../../../filmstrip/functions.web";
+import {getToolboxHeight} from "../../../toolbox/functions.web";
+import {shouldDisplayTileView} from "../../../video-layout/functions.any";
+import {WHITEBOARD_UI_OPTIONS} from "../../constants";
 import {
     getCollabDetails,
     getCollabServerUrl,
     isWhiteboardOpen,
-    isWhiteboardVisible
-} from '../../functions';
+    isWhiteboardVisible,
+} from "../../functions";
+import {resetWhiteboard, setWhiteboardOpen} from "../../actions";
+import {CountdownTimer} from "./countdownTimer";
+import {toggleWhiteboard} from "../../actions.any";
 
 /**
  * Space taken by meeting elements like the subject and the watermark.
@@ -26,7 +29,6 @@ import {
 const HEIGHT_OFFSET = 80;
 
 interface IDimensions {
-
     /* The height of the component. */
     height: string;
 
@@ -41,20 +43,51 @@ interface IDimensions {
  * @returns {JSX.Element} - The React component.
  */
 const Whiteboard = (props: WithTranslation): JSX.Element => {
+    const dispatch = useDispatch();
     const excalidrawRef = useRef<any>(null);
     const excalidrawAPIRef = useRef<any>(null);
     const collabAPIRef = useRef<any>(null);
+    const [blob, setBlob] = useState<any>(null);
+    const endTime = new Date().getTime() + 5 * 60 * 1000;
+
 
     const isOpen = useSelector(isWhiteboardOpen);
     const isVisible = useSelector(isWhiteboardVisible);
     const isInTileView = useSelector(shouldDisplayTileView);
-    const { clientHeight, clientWidth } = useSelector((state: IReduxState) => state['features/base/responsive-ui']);
-    const { visible: filmstripVisible, isResizing } = useSelector((state: IReduxState) => state['features/filmstrip']);
+    const {clientHeight, clientWidth} = useSelector(
+        (state: IReduxState) => state["features/base/responsive-ui"]
+    );
+    const {visible: filmstripVisible, isResizing} = useSelector(
+        (state: IReduxState) => state["features/filmstrip"]
+    );
     const filmstripWidth: number = useSelector(getVerticalViewMaxWidth);
     const collabDetails = useSelector(getCollabDetails);
     const collabServerUrl = useSelector(getCollabServerUrl);
-    const { defaultRemoteDisplayName } = useSelector((state: IReduxState) => state['features/base/config']);
-    const localParticipantName = useSelector(getLocalParticipant)?.name || defaultRemoteDisplayName || 'Fellow Jitster';
+    const {defaultRemoteDisplayName} = useSelector(
+        (state: IReduxState) => state["features/base/config"]
+    );
+
+    const {displayName} = useSelector(
+        (state: IReduxState) => state["features/base/settings"]
+    );
+
+    const {participantId} = useSelector(
+        (state: IReduxState) => state["features/large-video"]);
+
+
+    // console.log('isOpen', isOpen);
+
+    const blobToFile = (blob, fileName, fileType) => {
+        // Create a new File object
+        const file = new File([blob], fileName, {type: fileType});
+
+        return file;
+    }
+
+    const localParticipantName =
+        useSelector(getLocalParticipant)?.name ||
+        defaultRemoteDisplayName ||
+        "Fellow Jitster";
 
     useEffect(() => {
         if (!collabAPIRef.current) {
@@ -62,13 +95,67 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
         }
 
         collabAPIRef.current.setUsername(localParticipantName);
-    }, [ localParticipantName ]);
+    }, [localParticipantName]);
+
+    useEffect(() => {
+        // dispatch(sendBlobWhiteboard(blobUrl));
+        console.log("blobUrl", blob);
+        const file = blobToFile(blob, "whiteboard.png", "image/png");
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('name', displayName);
+        formData.append('uid', participantId);
+
+        try {
+            if (isOpen && blob) {
+                fetch('http://127.0.0.1:4000/api/upload-image', {
+                    method: 'POST',
+                    body: formData,
+                }).then((response) => {
+                }).finally(() => {
+                    setBlob(null);
+                });
+            }
+
+
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            setBlob(null);
+        }
+    }, [blob, isOpen]);
+
+    useEffect(() => {
+        if (isOpen && !blob) {
+            setTimeout(() => {
+                exportTo();
+                dispatch(setWhiteboardOpen(false));
+                // dispatch(toggleWhiteboard());
+                // dispatch(resetWhiteboard());
+            }, 5000)
+        }
+    }, [isOpen, blob]);
+
+    // console.log("excalidrawRef", excalidrawRef);
+    console.log("isOpen", isOpen, isVisible);
+
+    const exportTo = async () => {
+        if (!excalidrawRef) {
+            return;
+        }
+        const blob = await exportToBlob({
+            elements: excalidrawRef.current?.getSceneElements(),
+            mimeType: "image/png",
+            appState: excalidrawRef.current?.getAppState(),
+            files: excalidrawRef.current?.getFiles(),
+        });
+        setBlob(blob);
+    };
 
     /**
-    * Computes the width and the height of the component.
-    *
-    * @returns {IDimensions} - The dimensions of the component.
-    */
+     * Computes the width and the height of the component.
+     *
+     * @returns {IDimensions} - The dimensions of the component.
+     */
     const getDimensions = (): IDimensions => {
         let width: number;
         let height: number;
@@ -108,52 +195,46 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
         }
         collabAPIRef.current = collabAPI;
         collabAPIRef.current.setUsername(localParticipantName);
-    }, [ localParticipantName ]);
+    }, [localParticipantName]);
 
     return (
         <div
-            className = { clsx(
-                isResizing && 'disable-pointer',
-                'whiteboard-container'
-            ) }
-            style = {{
+            className={clsx(
+                isResizing && "disable-pointer",
+                "whiteboard-container"
+            )}
+            style={{
                 ...getDimensions(),
                 marginTop: `${HEIGHT_OFFSET}px`,
-                display: `${isInTileView || !isVisible ? 'none' : 'block'}`
-            }}>
-            {
-                isOpen && (
-                    <div className = 'excalidraw-wrapper'>
-                        {/*
-                          * Excalidraw renders a few lvl 2 headings. This is
-                          * quite fortunate, because we actually use lvl 1
-                          * headings to mark the big sections of our app. So make
-                          * sure to mark the Excalidraw context with a lvl 1
-                          * heading before showing the whiteboard.
-                          */
-                            <span
-                                aria-level = { 1 }
-                                className = 'sr-only'
-                                role = 'heading'>
-                                { props.t('whiteboard.accessibilityLabel.heading') }
-                            </span>
+                display: `${isInTileView || !isVisible ? "none" : "block"}`,
+            }}
+        >
+            {isOpen && (
+                <>
+                    <CountdownTimer targetDate={endTime} />
+                    <div className="excalidraw-wrapper">
+                        {
+                            /*
+                             * Excalidraw renders a few lvl 2 headings. This is
+                             * quite fortunate, because we actually use lvl 1
+                             * headings to mark the big sections of our app. So make
+                             * sure to mark the Excalidraw context with a lvl 1
+                             * heading before showing the whiteboard.
+                             */
+                            <span aria-level={1} className="sr-only" role="heading">
+                            {props.t("whiteboard.accessibilityLabel.heading")}
+                        </span>
                         }
-                        <ExcalidrawApp
-                            collabDetails = { collabDetails }
-                            collabServerUrl = { collabServerUrl }
-                            excalidraw = {{
-                                isCollaborating: true,
-
-                                // @ts-ignore
-                                ref: excalidrawRef,
-                                theme: 'light',
-                                UIOptions: WHITEBOARD_UI_OPTIONS
-                            }}
-                            getCollabAPI = { getCollabAPI }
-                            getExcalidrawAPI = { getExcalidrawAPI } />
+                        <Excalidraw
+                            isCollaborating={true}
+                            // @ts-ignore
+                            ref={excalidrawRef}
+                            UIOptions={WHITEBOARD_UI_OPTIONS}
+                        />
                     </div>
-                )
-            }
+                </>
+
+            )}
         </div>
     );
 };
