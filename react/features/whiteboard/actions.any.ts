@@ -12,6 +12,7 @@ import { WhiteboardStatus } from './types';
  */
 export function toggleWhiteboard() {
     console.log('toggleWhiteboard');
+
     return async (dispatch: IStore['dispatch'], getState: IStore['getState']) => {
         const state = getState();
         const isAllowed = isWhiteboardAllowed(state);

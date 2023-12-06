@@ -35,8 +35,6 @@ import {
     shouldNotifyUserLimit
 } from './functions';
 import { WhiteboardStatus } from './types';
-import {getLocalParticipant} from "../base/participants/functions";
-import {PARTICIPANT_ROLE} from "../base/participants/constants";
 
 const focusWhiteboard = (store: IStore) => {
     const { dispatch, getState } = store;
@@ -86,7 +84,7 @@ MiddlewareRegistry.register((store: IStore) => (next: Function) => async (action
 
         console.log('existingCollabDetails', existingCollabDetails);
 
-        const isModerator = getLocalParticipant(state)?.role === PARTICIPANT_ROLE.MODERATOR;
+        // const isModerator = getLocalParticipant(state)?.role === PARTICIPANT_ROLE.MODERATOR;
 
         if (!existingCollabDetails) {
             const collabLinkData = await generateCollaborationLinkData();

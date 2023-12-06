@@ -1,13 +1,20 @@
 // @ts-ignore
+import PropTypes from 'prop-types';
 import React from 'react';
 
-const DateTimeDisplay = ({ value, type, isDanger }) => {
-    return (
-        <div className={isDanger ? 'countdown danger' : 'countdown'}>
-            <p>{value}</p>
-            <span>{type}</span>
-        </div>
-    );
+// @ts-ignore
+
+const DateTimeDisplay = ({ value, type, isDanger }) => (
+    <div className = { isDanger ? 'countdown danger' : 'countdown' }>
+        <p>{value}</p>
+        <span>{type}</span>
+    </div>
+);
+
+DateTimeDisplay.propTypes = {
+    isDanger: PropTypes.bool,
+    type: PropTypes.string,
+    value: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ])
 };
 
 export default DateTimeDisplay;

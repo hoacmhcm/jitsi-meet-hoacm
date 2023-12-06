@@ -192,8 +192,7 @@ class LargeVideo extends Component<IProps> {
             _displayScreenSharingPlaceholder,
             _isChatOpen,
             _noAutoPlayVideo,
-            _showDominantSpeakerBadge,
-            _whiteboardReady
+            _showDominantSpeakerBadge
         } = this.props;
         const style = this._getCustomStyles();
         const className = `videocontainer${_isChatOpen ? ' shift-right' : ''}`;

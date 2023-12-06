@@ -1,24 +1,35 @@
 // @ts-ignore
+import PropTypes from 'prop-types';
 import React from 'react';
-import {useCountdown} from "./useCountdown";
-import {ExpiredNotice} from "./expiredNotice";
-import {ShowCounter} from "./showCounter";
 
-const CountdownTimer = ({targetDate}) => {
-    const [days, hours, minutes, seconds] = useCountdown(targetDate);
+
+// @ts-ignore
+import { ExpiredNotice } from './expiredNotice';
+import { ShowCounter } from './showCounter';
+import { useCountdown } from './useCountdown';
+
+interface ICountdownTimerProps {
+    targetDate: Date;
+}
+
+const CountdownTimer: React.FC<ICountdownTimerProps> = ({ targetDate }) => {
+    const [ days, hours, minutes, seconds ] = useCountdown(targetDate);
 
     if (days + hours + minutes + seconds <= 0) {
-        return <ExpiredNotice/>;
-    } else {
-        return (
-            <ShowCounter
-                days={days}
-                hours={hours}
-                minutes={minutes}
-                seconds={seconds}
-            />
-        );
+        return <ExpiredNotice />;
     }
+
+    return (
+        <ShowCounter
+            days = { days }
+            hours = { hours }
+            minutes = { minutes }
+            seconds = { seconds } />
+    );
 };
 
-export {CountdownTimer};
+CountdownTimer.propTypes = {
+    targetDate: PropTypes.instanceOf(Date).isRequired
+};
+
+export { CountdownTimer };
