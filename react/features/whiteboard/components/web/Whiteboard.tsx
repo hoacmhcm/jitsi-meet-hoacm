@@ -77,7 +77,7 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
 
     // console.log('isOpen', isOpen);
 
-    const blobToFile = (blobData, fileName, fileType) => {
+    const blobToFile = (blobData: BlobPart, fileName: string, fileType: string) => {
         // Create a new File object
         const file = new File([ blobData ], fileName, { type: fileType });
 
@@ -116,11 +116,16 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
         // dispatch(sendBlobWhiteboard(blobUrl));
         console.log('blobUrl', blob);
         const file = blobToFile(blob, 'whiteboard.png', 'image/png');
-        const formData = new FormData();
+        const formData: FormData = new FormData();
 
         formData.append('file', file);
-        formData.append('name', displayName);
-        formData.append('uid', participantId);
+        if (displayName !== undefined) {
+            formData.append('name', displayName);
+        }
+
+        if (participantId !== undefined) {
+            formData.append('uid', participantId);
+        }
 
         try {
             if (isOpen && blob) {

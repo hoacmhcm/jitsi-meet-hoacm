@@ -9,7 +9,7 @@ import { ShowCounter } from './showCounter';
 import { useCountdown } from './useCountdown';
 
 interface ICountdownTimerProps {
-    targetDate: Date;
+    targetDate: Date | number;
 }
 
 const CountdownTimer: React.FC<ICountdownTimerProps> = ({ targetDate }) => {
