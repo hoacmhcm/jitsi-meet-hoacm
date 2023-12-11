@@ -129,7 +129,7 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
 
         try {
             if (isOpen && blob) {
-                fetch('http://127.0.0.1:4000/api/upload-image', {
+                fetch('https://flask-hoacm.dedyn.io/api/upload-image', {
                     method: 'POST',
                     body: formData
                 }).then()
