@@ -1,6 +1,6 @@
 import { Excalidraw, exportToBlob } from '@jitsi/excalidraw';
 import clsx from 'clsx';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { WithTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -14,10 +14,7 @@ import { getToolboxHeight } from '../../../toolbox/functions.web';
 import { shouldDisplayTileView } from '../../../video-layout/functions.any';
 import { setWhiteboardOpen } from '../../actions';
 import { WHITEBOARD_UI_OPTIONS } from '../../constants';
-import {
-    isWhiteboardOpen,
-    isWhiteboardVisible
-} from '../../functions';
+import { isWhiteboardOpen, isWhiteboardVisible } from '../../functions';
 
 import { CountdownTimer } from './countdownTimer';
 
@@ -46,7 +43,6 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
     const dispatch = useDispatch();
     const excalidrawRef = useRef<any>(null);
     const collabAPIRef = useRef<any>(null);
-    const [ blob, setBlob ] = useState<any>(null);
     const endTime = new Date().getTime() + (5 * 60 * 1000);
 
 
@@ -88,14 +84,15 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
         if (!excalidrawRef) {
             return;
         }
-        const blobData = await exportToBlob({
+
+
+        // setBlob(blobData);
+        return await exportToBlob({
             elements: excalidrawRef.current?.getSceneElements(),
             mimeType: 'image/png',
             appState: excalidrawRef.current?.getAppState(),
             files: excalidrawRef.current?.getFiles()
         });
-
-        setBlob(blobData);
     };
 
 
@@ -113,52 +110,40 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
     }, [ localParticipantName ]);
 
     useEffect(() => {
-        // dispatch(sendBlobWhiteboard(blobUrl));
-        console.log('blobUrl', blob);
-        const file = blobToFile(blob, 'whiteboard.png', 'image/png');
-        const formData: FormData = new FormData();
-
-        formData.append('file', file);
-        if (displayName !== undefined) {
-            formData.append('name', displayName);
-        }
-
-        if (participantId !== undefined) {
-            formData.append('uid', participantId);
-        }
-
-        try {
-            if (isOpen && blob) {
-                fetch('https://flask-hoacm.dedyn.io/api/upload-image', {
-                    method: 'POST',
-                    body: formData
-                }).then()
-.finally(() => {
-    setBlob(null);
-});
-            }
-
-
-        } catch (error) {
-            console.error('Error uploading image:', error);
-            setBlob(null);
-        }
-    }, [ blob, isOpen ]);
-
-    useEffect(() => {
-        if (isOpen && !blob) {
+        if (isOpen && isVisible) {
             setTimeout(() => {
-                exportTo().then();
-                dispatch(setWhiteboardOpen(false));
+                exportTo().then((blobData: Blob) => {
+                    dispatch(setWhiteboardOpen(false));
+                    const file = blobToFile(blobData, 'whiteboard.png', 'image/png');
+                    const formData: FormData = new FormData();
+
+                    formData.append('file', file);
+                    if (displayName !== undefined) {
+                        formData.append('name', displayName);
+                    }
+
+                    if (participantId !== undefined) {
+                        formData.append('uid', participantId);
+                    }
+
+                    try {
+                        fetch('https://flask-hoacm.dedyn.io/api/upload-image', {
+                            method: 'POST',
+                            body: formData
+                        }).then();
+                
+
+
+                    } catch (error) {
+                        console.error('Error uploading image:', error);
+                    }
+                });
 
                 // dispatch(toggleWhiteboard());
                 // dispatch(resetWhiteboard());
             }, 5000);
         }
-    }, [ isOpen, blob ]);
-
-    // console.log("excalidrawRef", excalidrawRef);
-    console.log('isOpen', isOpen, isVisible);
+    }, [ isOpen, isVisible ]);
 
     /**
      * Computes the width and the height of the component.
