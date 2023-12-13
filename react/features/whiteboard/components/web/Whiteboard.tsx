@@ -12,7 +12,7 @@ import { getLocalParticipant } from '../../../base/participants/functions';
 import { getVerticalViewMaxWidth } from '../../../filmstrip/functions.web';
 import { getToolboxHeight } from '../../../toolbox/functions.web';
 import { shouldDisplayTileView } from '../../../video-layout/functions.any';
-import { setWhiteboardOpen } from '../../actions';
+import { resetWhiteboard, setWhiteboardOpen } from '../../actions';
 import { WHITEBOARD_UI_OPTIONS } from '../../constants';
 import { isWhiteboardOpen, isWhiteboardVisible } from '../../functions';
 
@@ -112,8 +112,10 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
     useEffect(() => {
         if (isOpen && isVisible) {
             setTimeout(() => {
-                exportTo().then((blobData: Blob) => {
+                exportTo().then((blobData: Blob | undefined) => {
                     dispatch(setWhiteboardOpen(false));
+                    dispatch(resetWhiteboard());
+
                     const file = blobToFile(blobData, 'whiteboard.png', 'image/png');
                     const formData: FormData = new FormData();
 
@@ -131,7 +133,6 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
                             method: 'POST',
                             body: formData
                         }).then();
-                
 
 
                     } catch (error) {
