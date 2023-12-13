@@ -73,7 +73,11 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
 
     // console.log('isOpen', isOpen);
 
-    const blobToFile = (blobData: BlobPart, fileName: string, fileType: string) => {
+    const blobToFile = (blobData: Blob | undefined, fileName: string, fileType: string) => {
+        if (!blobData) {
+            return;
+        }
+
         // Create a new File object
         const file = new File([ blobData ], fileName, { type: fileType });
 
