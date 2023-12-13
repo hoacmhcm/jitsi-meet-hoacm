@@ -120,10 +120,13 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
                     dispatch(setWhiteboardOpen(false));
                     dispatch(resetWhiteboard());
 
-                    const file = blobToFile(blobData, 'whiteboard.png', 'image/png');
+                    const file: File | undefined = blobToFile(blobData, 'whiteboard.png', 'image/png');
                     const formData: FormData = new FormData();
 
-                    formData.append('file', file);
+                    if (file !== undefined) {
+                        formData.append('file', file);
+                    }
+
                     if (displayName !== undefined) {
                         formData.append('name', displayName);
                     }
