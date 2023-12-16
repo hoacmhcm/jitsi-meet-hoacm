@@ -149,7 +149,7 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
 
                 // dispatch(toggleWhiteboard());
                 // dispatch(resetWhiteboard());
-            }, 30000);
+            }, 5000);
         }
     }, [ isOpen, isVisible ]);
 
