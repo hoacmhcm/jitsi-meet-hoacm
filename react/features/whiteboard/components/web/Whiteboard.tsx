@@ -136,7 +136,7 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
                     }
 
                     try {
-                        fetch('https://flask-hoacm.dedyn.io/api/upload-image', {
+                        fetch('http://localhost:4000/api/upload-image', {
                             method: 'POST',
                             body: formData
                         }).then();
