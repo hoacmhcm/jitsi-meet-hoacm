@@ -63,12 +63,11 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
         (state: IReduxState) => state['features/base/config']
     );
 
-    const { displayName } = useSelector(
-        (state: IReduxState) => state['features/base/settings']
-    );
+    const { local } = useSelector(
+        (state: IReduxState) => state['features/base/participants']);
 
-    const { participantId } = useSelector(
-        (state: IReduxState) => state['features/large-video']);
+    const { conference, room } = useSelector(
+        (state: IReduxState) => state['features/base/conference']);
 
 
     // console.log('isOpen', isOpen);
@@ -127,12 +126,20 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
                         formData.append('file', file);
                     }
 
-                    if (displayName !== undefined) {
-                        formData.append('name', displayName);
+                    if (local?.name !== undefined) {
+                        formData.append('name', local?.name);
                     }
 
-                    if (participantId !== undefined) {
-                        formData.append('uid', participantId);
+                    if (local?.id !== undefined) {
+                        formData.append('uid', local.id);
+                    }
+
+                    if (room !== undefined) {
+                        formData.append('roomName', room);
+                    }
+
+                    if (conference?.sessionId !== undefined) {
+                        formData.append('sessionId', conference?.sessionId);
                     }
 
                     try {
