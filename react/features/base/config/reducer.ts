@@ -62,9 +62,9 @@ export interface IConfigState extends IConfig {
     analysis?: {
         obfuscateRoomName?: boolean;
     };
-    ocr_url?: string;
     disableRemoteControl?: boolean;
     error?: Error;
+    ocr_url?: string;
     oldConfig?: {
         bosh?: string;
         focusUserJid?: string;
@@ -75,6 +75,7 @@ export interface IConfigState extends IConfig {
         p2p?: object;
         websocket?: string;
     };
+    test_time: number;
 }
 
 ReducerRegistry.register<IConfigState>('features/base/config', (state = _getInitialState(), action): IConfigState => {

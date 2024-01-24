@@ -43,8 +43,6 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
     const dispatch = useDispatch();
     const excalidrawRef = useRef<any>(null);
     const collabAPIRef = useRef<any>(null);
-    const endTime = new Date().getTime() + (5 * 60 * 1000);
-
 
     const isOpen = useSelector(isWhiteboardOpen);
     const isVisible = useSelector(isWhiteboardVisible);
@@ -69,11 +67,10 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
     const { conference, room } = useSelector(
         (state: IReduxState) => state['features/base/conference']);
 
-    const  config  = useSelector(
+    const config = useSelector(
         (state: IReduxState) => state['features/base/config']);
 
-    console.log('state[\'features/base/config\']', config);
-
+    const endTime = config?.test_time ? new Date().getTime() + config?.test_time * 60 : 5 * 60 * 1000;
 
     // console.log('isOpen', isOpen);
 
@@ -161,7 +158,7 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
 
                 // dispatch(toggleWhiteboard());
                 // dispatch(resetWhiteboard());
-            }, 5000);
+            }, config.test_time);
         }
     }, [ isOpen, isVisible ]);
 

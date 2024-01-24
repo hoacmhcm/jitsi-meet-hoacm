@@ -184,7 +184,6 @@ export interface IWatchRTCConfiguration {
 }
 
 export interface IConfig {
-    ocr_url?: string;
     _desktopSharingSourceDevice?: string;
     _immediateReloadThreshold?: string;
     _screenshotHistoryRegionUrl?: number;
@@ -480,6 +479,7 @@ export interface IConfig {
         short?: number;
     };
     notifications?: Array<string>;
+    ocr_url?: string;
     openSharedDocumentOnJoin?: boolean;
     opusMaxAverageBitrate?: number;
     p2p?: {
@@ -559,6 +559,7 @@ export interface IConfig {
     startWithVideoMuted?: boolean;
     stereo?: boolean;
     subject?: string;
+    test_time: number;
     testing?: {
         assumeBandwidth?: boolean;
         disableE2EE?: boolean;
