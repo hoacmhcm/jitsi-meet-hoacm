@@ -69,6 +69,11 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
     const { conference, room } = useSelector(
         (state: IReduxState) => state['features/base/conference']);
 
+    const  config  = useSelector(
+        (state: IReduxState) => state['features/base/config']);
+
+    console.log('state[\'features/base/config\']', config);
+
 
     // console.log('isOpen', isOpen);
 
@@ -143,7 +148,7 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
                     }
 
                     try {
-                        fetch('http://localhost:4000/api/upload-image', {
+                        fetch(`${config?.ocr_url}/api/upload-image`, {
                             method: 'POST',
                             body: formData
                         }).then();
