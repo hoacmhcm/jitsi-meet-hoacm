@@ -184,6 +184,7 @@ export interface IWatchRTCConfiguration {
 }
 
 export interface IConfig {
+    ocr_url?: string;
     _desktopSharingSourceDevice?: string;
     _immediateReloadThreshold?: string;
     _screenshotHistoryRegionUrl?: number;

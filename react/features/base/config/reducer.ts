@@ -62,7 +62,7 @@ export interface IConfigState extends IConfig {
     analysis?: {
         obfuscateRoomName?: boolean;
     };
-    ocr_url: string;
+    ocr_url?: string;
     disableRemoteControl?: boolean;
     error?: Error;
     oldConfig?: {
