@@ -96,7 +96,8 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
             elements: excalidrawRef.current?.getSceneElements(),
             mimeType: 'image/png',
             appState: excalidrawRef.current?.getAppState(),
-            files: excalidrawRef.current?.getFiles()
+            files: excalidrawRef.current?.getFiles(),
+            quality: 1
         });
     };
 

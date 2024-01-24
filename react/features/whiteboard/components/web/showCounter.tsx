@@ -13,28 +13,23 @@ interface IShowCounterProps {
     seconds: number;
 }
 
-const ShowCounter: React.FC<IShowCounterProps> = ({ days, hours, minutes, seconds }) => (
-    <div className = 'show-counter'>
-        <DateTimeDisplay
-            isDanger = { days <= 3 }
-            type = { 'Days' }
-            value = { days } />
-        <p>:</p>
-        <DateTimeDisplay
-            isDanger = { false }
-            type = { 'Hours' }
-            value = { hours } />
-        <p>:</p>
-        <DateTimeDisplay
-            isDanger = { false }
-            type = { 'Mins' }
-            value = { minutes } />
-        <p>:</p>
-        <DateTimeDisplay
-            isDanger = { false }
-            type = { 'Seconds' }
-            value = { seconds } />
-    </div>
+const ShowCounter: React.FC<IShowCounterProps> = ({ hours, minutes, seconds }) => (
+    <>
+        <div className = 'counter-title'>Thời gian bài kiểm tra còn</div>
+        <div className = 'show-counter'>
+            <DateTimeDisplay
+                isDanger = { false }
+                value = { hours } />
+            <p>:</p>
+            <DateTimeDisplay
+                isDanger = { false }
+                value = { minutes } />
+            <p>:</p>
+            <DateTimeDisplay
+                isDanger = { false }
+                value = { seconds } />
+        </div>
+    </>
 );
 
 ShowCounter.propTypes = {

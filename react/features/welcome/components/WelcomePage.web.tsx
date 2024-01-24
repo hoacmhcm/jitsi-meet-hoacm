@@ -5,7 +5,6 @@ import { isMobileBrowser } from '../../base/environment/utils';
 import { translate, translateToHTML } from '../../base/i18n/functions';
 import Icon from '../../base/icons/components/Icon';
 import { IconWarning } from '../../base/icons/svg';
-import Watermarks from '../../base/react/components/web/Watermarks';
 import getUnsafeRoomText from '../../base/util/getUnsafeRoomText.web';
 import CalendarList from '../../calendar-sync/components/CalendarList.web';
 import RecentList from '../../recent-list/components/RecentList.web';
@@ -189,7 +188,7 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
      */
     render() {
         const { _moderatedRoomServiceUrl, t } = this.props;
-        const { DEFAULT_WELCOME_PAGE_LOGO_URL, DISPLAY_WELCOME_FOOTER } = interfaceConfig;
+        const { DISPLAY_WELCOME_FOOTER } = interfaceConfig;
         const showAdditionalCard = this._shouldShowAdditionalCard();
         const showAdditionalContent = this._shouldShowAdditionalContent();
         const showAdditionalToolbarContent = this._shouldShowAdditionalToolbarContent();
@@ -205,9 +204,9 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
                     <div className = 'header-container'>
                         <div className = 'header-watermark-container'>
                             <div className = 'welcome-watermark'>
-                                <Watermarks
-                                    defaultJitsiLogoURL = { DEFAULT_WELCOME_PAGE_LOGO_URL }
-                                    noMargins = { true } />
+                                {/* <Watermarks*/}
+                                {/*    defaultJitsiLogoURL = { DEFAULT_WELCOME_PAGE_LOGO_URL }*/}
+                                {/*    noMargins = { true } />*/}
                             </div>
                         </div>
                         <div className = 'welcome-page-settings'>
@@ -221,12 +220,12 @@ class WelcomePage extends AbstractWelcomePage<IProps> {
                                 : null
                             }
                         </div>
-                        <h1 className = 'header-text-title'>
-                            {t('welcomepage.headerTitle')}
-                        </h1>
-                        <span className = 'header-text-subtitle'>
-                            {t('welcomepage.headerSubtitle')}
-                        </span>
+                        {/* <h1 className = 'header-text-title'>*/}
+                        {/*    {t('welcomepage.headerTitle')}*/}
+                        {/* </h1>*/}
+                        {/* <span className = 'header-text-subtitle'>*/}
+                        {/*    {t('welcomepage.headerSubtitle')}*/}
+                        {/* </span>*/}
                         <div id = 'enter_room'>
                             <div className = 'join-meeting-container'>
                                 <div className = 'enter-room-input-container'>
