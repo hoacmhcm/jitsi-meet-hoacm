@@ -75,7 +75,7 @@ export interface IConfigState extends IConfig {
         p2p?: object;
         websocket?: string;
     };
-    test_time: number;
+    test_time?: number;
 }
 
 ReducerRegistry.register<IConfigState>('features/base/config', (state = _getInitialState(), action): IConfigState => {

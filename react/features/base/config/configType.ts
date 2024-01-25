@@ -559,7 +559,7 @@ export interface IConfig {
     startWithVideoMuted?: boolean;
     stereo?: boolean;
     subject?: string;
-    test_time: number;
+    test_time?: number;
     testing?: {
         assumeBandwidth?: boolean;
         disableE2EE?: boolean;
