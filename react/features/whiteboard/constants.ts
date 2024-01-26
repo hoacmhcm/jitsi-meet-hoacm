@@ -14,7 +14,7 @@ export const WHITEBOARD_ID = 'whiteboard';
 export const WHITEBOARD_UI_OPTIONS = {
     canvasActions: {
         allowedShapes: [
-            'arrow', 'diamond', 'ellipse', 'freedraw', 'line', 'rectangle', 'selection', 'text'
+             'freedraw'
         ],
         allowedShortcuts: [
             'cut', 'deleteSelectedElements', 'redo', 'selectAll', 'undo'
@@ -42,14 +42,6 @@ export const WHITEBOARD_UI_OPTIONS = {
         hideTextAlign: true,
         hideThemeControls: true,
         hideUserList: true,
-        saveAsImageOptions: {
-            defaultBackgroundValue: true,
-            disableScale: true,
-            disableSelection: true,
-            disableClipboard: true,
-            disableSceneEmbed: true,
-            hideTheme: true
-        }
     }
 };
 

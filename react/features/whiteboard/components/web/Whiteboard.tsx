@@ -243,7 +243,22 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
                         <Excalidraw
                             UIOptions = { WHITEBOARD_UI_OPTIONS }
                             isCollaborating = { true }
-
+                            initialData={{
+                                appState: {
+                                    activeTool:
+                                        {
+                                            "type": "freedraw",
+                                        },
+                                    currentItemStrokeColor: '#000000',
+                                    currentItemStrokeStyle: 'solid',
+                                    currentItemStrokeWidth: 0.5,
+                                    currentItemBackgroundColor: 'transparent',
+                                    currentItemFillStyle: 'solid',
+                                    penMode: true,
+                                    penDetected: true,
+                                    exportBackground: false,
+                                }
+                            }}
                             // @ts-ignore
                             ref = { excalidrawRef } />
                     </div>
