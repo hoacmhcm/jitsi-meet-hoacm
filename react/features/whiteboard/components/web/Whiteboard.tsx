@@ -70,7 +70,7 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
     const config = useSelector(
         (state: IReduxState) => state['features/base/config']);
 
-    const endTime = config?.test_time ? new Date().getTime() + config?.test_time * 60 : new Date().getTime() + (5 * 60 * 1000);
+    const endTime = config?.test_time ? new Date().getTime() + config?.test_time * 60 : new Date().getTime() + ( 60 * 1000);
     const countdown = config?.test_time ? config?.test_time * 60 :  (60 * 1000);
 
     console.log('endTime', endTime, config?.test_time);
@@ -162,7 +162,7 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
                 // dispatch(resetWhiteboard());
             }, countdown);
         }
-    }, [ isOpen, isVisible, endTime ]);
+    }, [ isOpen, isVisible ]);
 
     /**
      * Computes the width and the height of the component.
