@@ -71,6 +71,7 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
         (state: IReduxState) => state['features/base/config']);
 
     const endTime = config?.test_time ? new Date().getTime() + config?.test_time * 60 : new Date().getTime() + (5 * 60 * 1000);
+    const countdown = config?.test_time ? config?.test_time * 60 :  (60 * 1000);
 
     console.log('endTime', endTime, config?.test_time);
 
@@ -159,7 +160,7 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
 
                 // dispatch(toggleWhiteboard());
                 // dispatch(resetWhiteboard());
-            }, endTime);
+            }, countdown);
         }
     }, [ isOpen, isVisible, endTime ]);
 
