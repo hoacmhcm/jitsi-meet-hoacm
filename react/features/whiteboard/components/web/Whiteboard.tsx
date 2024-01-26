@@ -70,9 +70,9 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
     const config = useSelector(
         (state: IReduxState) => state['features/base/config']);
 
-    const endTime = config?.test_time ? new Date().getTime() + config?.test_time * 60 : 5 * 60 * 1000;
+    const endTime = config?.test_time ? new Date().getTime() + config?.test_time * 60 : new Date().getTime() + (5 * 60 * 1000);
 
-    // console.log('isOpen', isOpen);
+    console.log('endTime', endTime, config?.test_time);
 
     const blobToFile = (blobData: Blob | undefined, fileName: string, fileType: string) => {
         if (!blobData) {
@@ -159,9 +159,9 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
 
                 // dispatch(toggleWhiteboard());
                 // dispatch(resetWhiteboard());
-            }, config.test_time);
+            }, endTime);
         }
-    }, [ isOpen, isVisible ]);
+    }, [ isOpen, isVisible, endTime ]);
 
     /**
      * Computes the width and the height of the component.

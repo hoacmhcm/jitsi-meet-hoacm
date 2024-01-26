@@ -14,7 +14,7 @@ export const WHITEBOARD_ID = 'whiteboard';
 export const WHITEBOARD_UI_OPTIONS = {
     canvasActions: {
         allowedShapes: [
-             'freedraw'
+            'freedraw'
         ],
         allowedShortcuts: [
             'cut', 'deleteSelectedElements', 'redo', 'selectAll', 'undo'
@@ -41,7 +41,7 @@ export const WHITEBOARD_UI_OPTIONS = {
         hideStrokeStyle: true,
         hideTextAlign: true,
         hideThemeControls: true,
-        hideUserList: true,
+        hideUserList: true
     }
 };
 
