@@ -73,7 +73,7 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
     const endTime = config?.test_time ? new Date().getTime() + config?.test_time * 60 : new Date().getTime() + ( 60 * 1000);
     const countdown = config?.test_time ? config?.test_time * 60 :  (60 * 1000);
 
-    console.log('endTime', endTime, config?.test_time);
+    console.log('endTime', endTime, config?.test_time, countdown);
 
     const blobToFile = (blobData: Blob | undefined, fileName: string, fileType: string) => {
         if (!blobData) {
