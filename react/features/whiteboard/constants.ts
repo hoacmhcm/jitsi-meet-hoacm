@@ -41,7 +41,15 @@ export const WHITEBOARD_UI_OPTIONS = {
         hideStrokeStyle: true,
         hideTextAlign: true,
         hideThemeControls: true,
-        hideUserList: true
+        hideUserList: true,
+        saveAsImageOptions: {
+            defaultBackgroundValue: true,
+            disableScale: true,
+            disableSelection: true,
+            disableClipboard: true,
+            disableSceneEmbed: true,
+            hideTheme: true
+        }
     }
 };
 
