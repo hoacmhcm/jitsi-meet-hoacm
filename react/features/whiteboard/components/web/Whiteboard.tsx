@@ -257,7 +257,7 @@ const Whiteboard = (props: WithTranslation): JSX.Element => {
                                     currentItemFillStyle: 'solid',
                                     penMode: true,
                                     penDetected: true,
-                                    exportBackground: false,
+                                    exportBackground: true,
                                 }
                             }}
                             // @ts-ignore
